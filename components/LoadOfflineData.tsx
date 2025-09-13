@@ -1,23 +1,33 @@
-import { View, Text } from 'react-native';
+import { View, Text, FlatList } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import NetInfo from '@react-native-community/netinfo';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function LoadOfflineData() {
+  interface Address {
+    street: string;
+    suite: string;
+    city: string;
+    zipcode: string;
+  }
 
-interface Details {
-  id: number;
-  name: string;
-  username: string,
-  address: object,
-  phone: string,
-  website: string,
-  company: object
-}
+  interface Company {
+    name: string;
+    catchPhrase: string;
+    bs: string;
+  }
+  interface Details {
+    id: number;
+    name: string;
+    username: string;
+    address: Address;
+    phone: string;
+    website: string;
+    company: Company;
+  }
 
-
-  const [isInternet, setIsInternet] = useState(false);
+  const [isInternet, setIsInternet] = useState<Boolean | null>(false);
   const [loadData, setLoadData] = useState<Details[]>([]);
 
   const fetchData = async () => {
@@ -50,18 +60,47 @@ interface Details {
     };
   }, []);
 
+  const renderItem = ({ item }: { item: Details }) => (
+    <View style={{ padding: 4, borderBottomWidth: 1 }}>
+      <Text>Id: {item.id}</Text>
+      <Text>Name: {item.name}</Text>
+      <Text>UserName: {item.username}</Text>
+      <Text>Phone: {item.phone}</Text>
+      <Text>Website: {item.website}</Text>
+      <Text>
+        Address: {item.address.street}, {item.address.suite}
+      </Text>
+      <Text>
+        {item.address.city} - {item.address.zipcode}
+      </Text>
+    </View>
+  );
+
   return (
-    <View>
-      <Text
+    <View style={{ flex: 1 }}>
+      <View
         style={{
-          margin: 2,
-          backgroundColor: `${isInternet ? 'green' : 'red'}`,
-          color: 'white',
+          justifyContent: 'flex-end',
+          width: '100%',
+          flexDirection: 'row',
         }}
       >
-        Device Status: {isInternet ? 'Online' : 'Offline'}
-      </Text>
-      <Text>{JSON.stringify(loadData)}</Text>
+        <Text
+          style={{
+            margin: 20,
+            backgroundColor: `${isInternet ? 'green' : 'red'}`,
+            color: 'white',
+            padding: 10,
+          }}
+        >
+          {isInternet ? 'Online' : 'Offline'}
+        </Text>
+      </View>
+      <FlatList
+        data={loadData}
+        keyExtractor={item => item.name}
+        renderItem={renderItem}
+      />
     </View>
   );
 }
