@@ -34,36 +34,31 @@ export default function LoadOfflineData() {
 
   //function fetchData if internet connection is available then get data and  store it in Asyncstorage
   //if no internet then get data from async storage
-  const fetchData = async () => {
-    try {
-      if (isInternet) {
-        const response = await axios.get(
-          'https://jsonplaceholder.typicode.com/users',
-        );
-        await AsyncStorage.setItem(
-          'offline-data',
-          JSON.stringify(response.data),
-        );
-        setLoadData(response.data);
-      } else {
-        const loadData = await AsyncStorage.getItem('offline-data');
-        setLoadData(JSON.parse(loadData) as Details[]);
-      }
-    } catch (error) {
-      console.log('error', error);
+  const fetchData = async (internet: boolean) => {
+  try {
+    if (internet) {
+      const response = await axios.get(
+        'https://jsonplaceholder.typicode.com/users',
+      );
+      await AsyncStorage.setItem('offline-data', JSON.stringify(response.data));
+      setLoadData(response.data);
+    } else {
+      const stored = await AsyncStorage.getItem('offline-data');
+      if (stored) setLoadData(JSON.parse(stored));
     }
-  };
+  } catch (error) {
+    console.log('error', error);
+  }
+};
 
   //To check internet connection using Netinfo pacakge and call fetchData func and set internet state
   useEffect(() => {
-    const unsubscribe = NetInfo.addEventListener(state => {
-      fetchData();
-      return setIsInternet(state?.isConnected);
-    });
-    return () => {
-      unsubscribe();
-    };
-  }, []);
+  const unsubscribe = NetInfo.addEventListener(state => {
+    setIsInternet(state.isConnected ?? false);
+    fetchData(state.isConnected ?? false);
+  });
+  return () => unsubscribe();
+}, []);
 
   //Render items in each rows
   const renderItem = ({ item }: { item: Details }) => (
@@ -110,3 +105,4 @@ export default function LoadOfflineData() {
     </View>
   );
 }
+
