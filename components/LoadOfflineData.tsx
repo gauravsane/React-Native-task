@@ -60,7 +60,7 @@ export default function LoadOfflineData() {
   return () => unsubscribe();
 }, []);
 
-  //Render items in each rows
+  //Render items in each rows.
   const renderItem = ({ item }: { item: Details }) => (
     <View style={{ padding: 4, borderBottomWidth: 1 }}>
       <Text>Id: {item.id}</Text>
@@ -105,4 +105,5 @@ export default function LoadOfflineData() {
     </View>
   );
 }
+
 
