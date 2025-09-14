@@ -5,6 +5,7 @@ import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function LoadOfflineData() {
+  //defines what properties and its types
   interface Address {
     street: string;
     suite: string;
@@ -27,9 +28,12 @@ export default function LoadOfflineData() {
     company: Company;
   }
 
+  //set states for internet connection and data
   const [isInternet, setIsInternet] = useState<Boolean | null>(false);
   const [loadData, setLoadData] = useState<Details[]>([]);
 
+  //function fetchData if internet connection is available then get data and  store it in Asyncstorage
+  //if no internet then get data from async storage
   const fetchData = async () => {
     try {
       if (isInternet) {
@@ -50,6 +54,7 @@ export default function LoadOfflineData() {
     }
   };
 
+  //To check internet connection using Netinfo pacakge and call fetchData func and set internet state
   useEffect(() => {
     const unsubscribe = NetInfo.addEventListener(state => {
       fetchData();
@@ -60,6 +65,7 @@ export default function LoadOfflineData() {
     };
   }, []);
 
+  //Render items in each rows
   const renderItem = ({ item }: { item: Details }) => (
     <View style={{ padding: 4, borderBottomWidth: 1 }}>
       <Text>Id: {item.id}</Text>
@@ -93,13 +99,13 @@ export default function LoadOfflineData() {
             padding: 10,
           }}
         >
-          {isInternet ? 'Online' : 'Offline'}
+          {isInternet ? 'Online' : 'Offline'}   
         </Text>
       </View>
       <FlatList
-        data={loadData}
-        keyExtractor={item => item.name}
-        renderItem={renderItem}
+        data={loadData} //data
+        keyExtractor={item => item.name}  //for uniqueness
+        renderItem={renderItem}  //rows
       />
     </View>
   );

@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-
+//defines what properties and its types
 interface CartItem {
   id: string;
   title: string;
@@ -20,6 +20,7 @@ const initialState: CartState = {
   totalPrice: 0,
 };
 
+//Provide initial state and reducers function how state changes for specific actions
 const cartSlice = createSlice({
   name: 'cart',
   initialState,

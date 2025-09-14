@@ -13,6 +13,7 @@ import { addToCart } from './Redux/CartSlice';
 import { useNavigation } from '@react-navigation/native';
 
 export default function ProductList() {
+  //defines what properties and its types
   interface ProductData {
     id: string;
     title: string;
@@ -21,10 +22,14 @@ export default function ProductList() {
     brand: string;
     thumbnail: string;
   }
+  //set states here for data
   const [data, setData] = useState<ProductData[] | null>([]);
+  //send action to the redux store to update state 
   const dispatch = useDispatch();
+  //navigation object to navigate betw screens
   const navigation = useNavigation();
 
+  //call first time when page is loaded and set data in state
   useEffect(() => {
     (async () => {
       const fetchData = await axios.get('https://dummyjson.com/products');
@@ -32,18 +37,20 @@ export default function ProductList() {
     })();
   }, []);
 
+  //to add items in cart and navigate to cart page
   const handleAddToCart = (item:any) => {
-    // add item to Redux
+    // add item to Redux state
     dispatch(addToCart({
       id: item.id,
       title: item.title,
       price: item.price,
       thumbnail: item.thumbnail,
     }));
-    // jump to Cart tab:
-    navigation.navigate('Cart'); // must match Tab.Screen name exactly
+    // jump to Cart tab
+    navigation.navigate('Cart');
   };
 
+  //render each row with Add to cart button
   const renderItem = ({ item }: { item: ProductData }) => {
     return (
       <View
@@ -89,8 +96,8 @@ export default function ProductList() {
     <View>
       <FlatList
         data={data}
-        keyExtractor={item => item.id}
-        renderItem={renderItem}
+        keyExtractor={item => item.id} //for uniqueness
+        renderItem={renderItem} //render each row
       />
     </View>
   );

@@ -2,12 +2,14 @@ import { View, Text, Button } from 'react-native'
 import React from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 
+//defines what properties and its types
 interface SecureTokenProps {
   dummyToken: string | null;
   handleStore: () => void;
   handleResetStore: () => void;
 }
 
+//just get stored token from secure storage set token and reset token functions from Home page as Props
 export default function SecureToken({dummyToken,handleStore,handleResetStore}: SecureTokenProps) {
   return (
      <SafeAreaView>

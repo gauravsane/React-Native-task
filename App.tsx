@@ -15,8 +15,10 @@ import ProductList from './components/ProductList';
 const Stack = createNativeStackNavigator();
 
 export default function App() {
+  //set State for Token and defines its type
   const [dummyToken, setDummyToken] = useState<string | null>(null);
 
+  //if in secure storage data is available then set it.
   useEffect(() => {
     (async () => {
       const credentials = await Keychain.getGenericPassword();
@@ -24,18 +26,21 @@ export default function App() {
     })();
   }, []);
 
+  //handleStore function is used to set the value in secure storage
   const handleStore = async () => {
     await Keychain.setGenericPassword('dummyUser', 'SECURE_TOKEN_GAURAV1999');
     setDummyToken('SECURE_TOKEN_GAURAV1999');
   };
 
+  //reset secure storage
   const handleResetStore = async () => {
     await Keychain.resetGenericPassword();
     setDummyToken(null);
   };
 
+  //open spcific screen when receive this link 
   const linking = {
-    prefixes: ['myapp://'],
+    prefixes: ['myapp://'], //any link starting with 
     config: {
       screens: {
         Home: 'Home',
@@ -45,6 +50,7 @@ export default function App() {
   };
 
   return (
+    //Provider used to access data anywhere in app
     <Provider store={store}>
       <NavigationContainer linking={linking}>
         <Stack.Navigator initialRouteName="Home">

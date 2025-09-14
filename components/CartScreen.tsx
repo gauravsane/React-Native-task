@@ -6,9 +6,11 @@ import { RootState } from './Redux/Store';
 
 export default function CartScreen() {
   const dispatch = useDispatch();
+  //useSelector is used to get items from redux state
   const { items, totalItems, totalPrice } = useSelector(
     (state: RootState) => state.cart,
   );
+  //show cart items its quantity and increment and decrement btn
   return (
     <View style={{ flex: 1, padding: 10 }}>
       <View
@@ -44,7 +46,7 @@ export default function CartScreen() {
               style={{ flexDirection: 'row', justifyContent: 'space-around' }}
             >
               <TouchableOpacity
-                onPress={() => dispatch(decrementQuantity(item.id))}
+                onPress={() => dispatch(decrementQuantity(item.id))}  //send action to redux store to update state
                 style={{
                   backgroundColor: 'orange',
                   padding: 4,
@@ -57,7 +59,7 @@ export default function CartScreen() {
                 <Text style={{ fontSize: 20 }}>-</Text>
               </TouchableOpacity>
               <TouchableOpacity
-                onPress={() => dispatch(incrementQuantity(item.id))}
+                onPress={() => dispatch(incrementQuantity(item.id))} //send action to redux store to update state
                 style={{
                   backgroundColor: 'orange',
                   padding: 4,
