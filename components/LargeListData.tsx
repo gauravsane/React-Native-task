@@ -1,6 +1,6 @@
 import { View, Text, FlatList, ActivityIndicator } from 'react-native'
 import React, { useState } from 'react'
-import { mockData } from './MockData'
+import { mockData } from './MockData';
 
 
 export default function LargeListData() {
